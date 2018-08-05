@@ -1,0 +1,126 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    天天生鲜-首页
+{% endblock %}
+
+{% block extCSS %}
+{{ block.super }}
+
+	<link rel="stylesheet" type="text/css" href="/static/stage/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/stage/css/main.css">
+{% endblock %}
+
+{% block content %}
+
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				<div class="login_info fl">
+					欢迎您：<em>张 山</em>
+				</div>
+				<div class="login_btn fl">
+                    {% if user.id %}
+                    <span style="color: #0c9c6e">Welcome to you {{ user.username }}</span>
+					{% else %}
+					<a href="{% url 'user:login' %}">登录</a>
+                    {% endif %}
+					<span>|</span>
+                    {% if user.id%}
+					<a href="{% url 'user:logout' %}">退出</a>
+                    {% else %}
+					<a href="{% url 'user:register' %}">注册</a>
+                    {% endif %}
+				</div>
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="{% url 'app:user_center_info' %}">用户中心</a>
+					<span>|</span>
+					<a href="{% url 'app:cart' %}">我的购物车</a>
+					<span>|</span>
+					<a href="{% url 'app:user_center_order' %}">我的订单</a>
+				</div>
+			</div>
+		</div>		
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="{% url 'app:index' %}" class="logo fl"><img src="/static/stage/images/logo.png"></a>
+		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+		<div class="search_con fr">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>		
+	</div>
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="{% url 'app:userCenterInfo' %}">· 个人信息</a></li>
+				<li><a href="{% url 'app:userCenterOrder' %}">· 全部订单</a></li>
+				<li><a href="{% url 'app:userCenterSite' %}" class="active">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">收货地址</h3>
+				<div class="site_con">
+					<dl>
+						<dt>当前地址：</dt>
+						<dd>{{address.detail_address }} ( {{address.recipient}} 收) {{address.tel}}</dd>
+                        <dt>其他地址：</dt>
+                        {% for address in other_address %}
+                        <dd>
+                            {{address.detail_address }} ( {{address.recipient}} 收) {{address.tel}}
+                            <a id="remove{{address.id}}" onclick="removeAddress({{address.id}})" href="javascript:;" style="position: absolute;left: 1200px">删除</a>
+                        </dd>
+                        {% endfor %}
+					</dl>					
+				</div>
+				<h3 class="common_title2">编辑地址</h3>
+				<div class="site_con">
+					<form action="" method="post">
+                        {% csrf_token %}
+						<div class="form_group">
+							<label>收件人：</label>
+							<input type="text" name="">
+						</div>
+						<div class="form_group form_group2">
+							<label>详细地址：</label>
+							<textarea class="site_area"></textarea>
+						</div>
+						<div class="form_group">
+							<label>邮编：</label>
+							<input type="text" name="">
+						</div>
+						<div class="form_group">
+							<label>手机：</label>
+							<input type="text" name="">
+						</div>
+
+						<input type="submit" name="" value="提交" class="info_submit">
+					</form>
+				</div>
+		</div>
+	</div>
+
+
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>		
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	
+{% endblock %}
